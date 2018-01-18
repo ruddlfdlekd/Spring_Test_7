@@ -10,5 +10,8 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+<a href="notice/noticeList">NoticeList</a>
+<a href="qna/qnaList">QnaList</a>
 </body>
 </html>
+
