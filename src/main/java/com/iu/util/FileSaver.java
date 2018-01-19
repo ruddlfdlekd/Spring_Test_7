@@ -1,54 +1,38 @@
 package com.iu.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileSaver {
 	
-	//3.transfer
-	public String save3(MultipartFile f , String filePath)throws Exception{
-		String fileName=f.getOriginalFilename();
-		fileName=fileName.substring(fileName.lastIndexOf("."));
-		fileName=UUID.randomUUID().toString()+"_"+fileName;
-		File file = new File(filePath, fileName);
+	public List<String> saver(MultipartFile [] f1, String filepath)throws Exception{
+		List<String> fileNames = new ArrayList();
+		System.out.println(f1.length);
 		
-		f.transferTo(file);
-		
-		return fileName;
+		for(MultipartFile f: f1){
+			String fileName=this.saver(f, filepath);
+			fileNames.add(fileName);
+		}
+		return fileNames;
 	}
 	
-	//2.FileCopyUtil
-	public String save2(MultipartFile f , String filePath)throws Exception{
-		String fileName=f.getOriginalFilename();
+	public String saver(MultipartFile f1, String filepath)throws Exception{
+		//1. 저장할 파일명 생성
+		//iu.jpg
+		String fileName= f1.getOriginalFilename();
+		System.out.println(fileName);
 		fileName=fileName.substring(fileName.lastIndexOf("."));
-		fileName=UUID.randomUUID().toString()+"_"+fileName;
-		File file = new File(filePath, fileName);
-		
-		
-		FileCopyUtils.copy(f.getBytes(), file);
-		
+		System.out.println(fileName);
+		fileName=UUID.randomUUID().toString()+fileName;
+		//fileName=UUID.randomUUID().toString()+"_"+fileName;
+		File f = new File(filepath, fileName);
+		//FileCopyUtils.copy(file.getBytes(), f);
+		f1.transferTo(f);
 		return fileName;
 	}
-	
-	
-	
-	//1. outputStream
-	public String save1(MultipartFile f , String filePath)throws Exception{
-		String fileName=f.getOriginalFilename();
-		fileName=fileName.substring(fileName.lastIndexOf("."));
-		fileName=UUID.randomUUID().toString()+"_"+fileName;
-		File file = new File(filePath, fileName);
-		
-		
-		byte [] fileDate = f.getBytes();
-		FileOutputStream fo = new FileOutputStream(file);
-		fo.write(fileDate);
-		fo.close();
-		
-		return fileName;
-	}
+
 }

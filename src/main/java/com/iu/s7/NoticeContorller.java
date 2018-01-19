@@ -3,14 +3,18 @@ package com.iu.s7;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.iu.board.BoardDTO;
+import com.iu.notice.NoticeDTO;
 import com.iu.notice.NoticeService;
 import com.iu.util.ListData;
 
@@ -41,23 +45,16 @@ public class NoticeContorller {
 	
 	
 	@RequestMapping(value="noticeWrite",  method=RequestMethod.POST)
-	public ModelAndView insert(BoardDTO boardDTO)throws Exception{
-		ModelAndView mv = new ModelAndView();
-		int result =0;
-		try {
-			result = noticeService.insert(boardDTO);
-		} catch (Exception e) {
+	public String insert(NoticeDTO noticeDTO,MultipartFile [] f1,HttpSession session, RedirectAttributes re) throws Exception{
+		int result=noticeService.insert(noticeDTO, f1, session);
+		String message="Write Fail";
+		if(result>0){
+			message="Write Success";
 		}
-		if(result>0)
-		mv.addObject("message", "success");
-		else
-		mv.addObject("message", "fail");
 		
-		
-		mv.addObject("path", "noticeList");
-		mv.setViewName("common/result");
-		return mv;
-}
+		re.addFlashAttribute("message", message);
+		return "redirect:./noticeList";
+	}
 	
 	
 }

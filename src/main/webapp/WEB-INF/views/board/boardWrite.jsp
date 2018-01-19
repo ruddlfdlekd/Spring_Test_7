@@ -12,7 +12,7 @@ $(function(){
 	$("#btn").click(function() {
 		if(z<5){
 			
-		 $("#result").append("<p><input type='file'><span class='x'>X</span></p>");
+		 $("#result").append("<p><input type='file' name='f1'><span class='x'>X</span></p>");
 		 /* 아니면 div에 <p><input type='file'><span class='x'>X</span></p>이걸 넣은걸 만들어서 html()로 가져와서 넣기 */
 		 z++;
 		}

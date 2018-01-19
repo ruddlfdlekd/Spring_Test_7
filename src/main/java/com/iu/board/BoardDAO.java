@@ -22,4 +22,6 @@ public interface BoardDAO {
 	public int delete(int num)throws Exception;
 	
 	public int totalCount(ListData listdata)throws Exception;
+	
+	public int num()throws Exception;
 }

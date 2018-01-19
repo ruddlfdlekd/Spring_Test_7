@@ -7,10 +7,18 @@
 		<constructor-arg name="sqlSession" ref="sqlSession"/>
 	</bean>
 	
+	<bean class="com.iu.file.FileDAO" id="fileDAO">
+		<constructor-arg name="sqlSession" ref="sqlSession"/>
+	</bean>
+	
 	<bean class="com.iu.notice.NoticeService" id="noticeService">
 	<!-- <constructor-arg name="noticeDAO" ref="noticeDAO"/> -->
 		<property name="noticeDAO" ref="noticeDAO"/>
+		<property name="fileDAO" ref="fileDAO"/>
 	</bean>
+	
+	
+	
 	
 
 

@@ -1,7 +1,5 @@
 package com.iu.util;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
-
 
 
 public class PageMaker {
