@@ -23,5 +23,4 @@ public interface BoardDAO {
 	
 	public int totalCount(ListData listdata)throws Exception;
 	
-	public int num()throws Exception;
 }

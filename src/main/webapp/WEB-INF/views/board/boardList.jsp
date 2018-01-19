@@ -60,7 +60,7 @@
 						--
 					</c:forEach>
 				</c:catch>
-				${dto.title}
+				<a href="${board}View?num=${dto.num}">${dto.title}</a>
 				</td>
 				<td>${dto.writer}</td>
 				<td>${dto.reg_date}</td>

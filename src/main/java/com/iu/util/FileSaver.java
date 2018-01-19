@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileSaver {
 	
 	public List<String> saver(MultipartFile [] f1, String filepath)throws Exception{
-		List<String> fileNames = new ArrayList();
+		List<String> fileNames = new ArrayList<String>();
 		System.out.println(f1.length);
 		
 		for(MultipartFile f: f1){

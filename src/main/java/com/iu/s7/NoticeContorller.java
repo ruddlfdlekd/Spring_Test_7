@@ -24,6 +24,16 @@ public class NoticeContorller {
 	@Inject
 	private NoticeService noticeService;
 
+	@RequestMapping(value="noticeView")
+	public ModelAndView SelectOne(int num)throws Exception{
+		BoardDTO boardDTO = noticeService.selectOne(num);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("view", boardDTO);
+		mv.addObject("board", "notice");
+		mv.setViewName("board/boardView");
+		return mv;
+	}
+	
 	@RequestMapping(value="noticeList")
 	public ModelAndView selectList(ListData listData)throws Exception{
 		

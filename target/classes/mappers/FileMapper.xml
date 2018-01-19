@@ -8,4 +8,8 @@
   insert into files values (file_seq.nextval,#{num},#{fname},#{oname})
   </insert>
   
+  <select id="selectFile" parameterType="int"  resultType="FileDTO">
+  select * from files where num=#{num}
+  </select>
+  
   </mapper>

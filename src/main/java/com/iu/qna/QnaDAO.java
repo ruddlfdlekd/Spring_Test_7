@@ -64,10 +64,7 @@ public class QnaDAO implements BoardDAO {
 		// TODO Auto-generated method stub
 	return sqlSession.insert(NAMESPACE+"replyInsert", boardDTO);
 	}
-	@Override
-	public int num()throws Exception{
-		return sqlSession.selectOne(NAMESPACE+"num");
-	}
+
 
 
 }

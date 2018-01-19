@@ -46,9 +46,6 @@ public class NoticeDAO implements BoardDAO {
 	public int delete(int num) throws Exception {
 		return sqlSession.delete(NAMESPACE+"delete", num);
 	}
-	@Override
-	public int num()throws Exception{
-		return sqlSession.selectOne(NAMESPACE+"num");
-	}
+	
 
 }

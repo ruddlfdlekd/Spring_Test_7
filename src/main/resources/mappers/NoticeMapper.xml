@@ -34,18 +34,43 @@
   		order by num desc) N)
   		where R between #{startRow} and #{lastRow}
   	</select>
+  	
+	 	<resultMap type="NoticeDTO" id="NoticeResult">
+  			<id property="num"  column="n"/>
+  			<result property="writer" column="w" />
+  			<result property="title" column="t"/>
+  			<result property="contents" column="c"/>
+  			<result property="reg_date" column="r"/>
+  			<result property="hit" column="h"/>
+  		</resultMap>
   
   
-  	<select id="selectOne" parameterType="int" resultType="NoticeDTO">
-  		select * from notice where num=#{num}
+  	<select id="selectOne" parameterType="int" resultMap="NoticeResult2">
+  	select n.*, f.* from notice n, files f where n.num=#{num} and n.num=f.num(+)
   	</select>
   	
-  	<select id="num" resultType="int">
-  		select board_seq.nextval from dual
-  	</select>
+  		
+  	<resultMap type="NoticeDTO" id="NoticeResult2">
+  		<id property="num" column="num"/>
+  		<result property="writer" column="writer"/>
+  		<result property="title" column="title"/>
+  		<result property="contents" column="contents"/>
+  		<result property="reg_date" column="reg_date"/>
+  		<result property="hit" column="hit"/>
+  		<collection property="files" ofType="FileDTO" javaType="ArrayList">
+  		<id property="fnum" column="fnum"/>
+  		<result property="num" column="num"/>
+  		<result property="fname" column="fname"/>
+  		<result property="oname" column="oname"/>
+  		</collection>
+  	</resultMap>
+  	
   	
   	
   	<insert id="insert" parameterType="NoticeDTO">
+  	<selectKey resultType="int" order="BEFORE" keyProperty="num">
+  	select board_seq.nextval from dual
+  	</selectKey>
   		insert into notice values
   		(#{num},#{title},#{writer}, #{contents}, sysdate, 0)
   	</insert>

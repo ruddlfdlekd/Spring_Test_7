@@ -24,6 +24,17 @@ public class QnaContorller {
 	@Inject
 	private QnaService qnaService;
 
+	
+	@RequestMapping(value="qnaView")
+	public ModelAndView SelectOne(int num)throws Exception{
+		BoardDTO boardDTO = qnaService.selectOne(num);
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("view", boardDTO);
+		mv.addObject("board", "qna");
+		mv.setViewName("board/boardView");
+		return mv;
+	}
+	
 	@RequestMapping(value="qnaList")
 	public ModelAndView selectList(ListData listData)throws Exception{
 	
@@ -45,19 +56,15 @@ public class QnaContorller {
 	
 	
 	@RequestMapping(value="qnaWrite",  method=RequestMethod.POST)
-	public String insert(QnaDTO qnaDTO,MultipartFile [] file,HttpSession session, RedirectAttributes re)throws Exception{
+	public String insert(QnaDTO qnaDTO,MultipartFile [] f1,HttpSession session, RedirectAttributes re)throws Exception{
 
-		int result =0;
-		String message="fail";
-		try {
-			result = qnaService.insert(qnaDTO, file, session);
-		} catch (Exception e) {
+		int result=qnaService.insert(qnaDTO, f1, session);
+		String message="Write Fail";
+		if(result>0){
+			message="Write Success";
 		}
-		if(result>0)
-		message="success";
 	
 		re.addFlashAttribute("message", message);
-		
 		return "redirect:./qnaList";
 }
 	

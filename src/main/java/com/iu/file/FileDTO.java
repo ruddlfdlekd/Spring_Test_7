@@ -4,6 +4,13 @@ public class FileDTO {
 	private String fname;
 	private String oname;
 	private int num;
+	private int fnum;
+	public int getFnum() {
+		return fnum;
+	}
+	public void setFnum(int fnum) {
+		this.fnum = fnum;
+	}
 	public String getFname() {
 		return fname;
 	}

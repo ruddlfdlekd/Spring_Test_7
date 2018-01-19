@@ -1,6 +1,8 @@
 package com.iu.file;
 
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 
 import org.springframework.stereotype.Repository;
@@ -17,4 +19,9 @@ public class FileDAO {
 	public int insert(FileDTO fileDTO)throws Exception{
 		return sqlSession.insert(NAMESPACE+"insert",fileDTO);
 	}
+	
+	public List<FileDTO> selectFile(int num)throws Exception{
+		return sqlSession.selectList(NAMESPACE+"selectFile", num);
+	}
+	
 }
