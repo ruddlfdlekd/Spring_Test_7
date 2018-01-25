@@ -56,6 +56,28 @@ public class NoticeService implements BoardService {
 		}
 		return result;
 	}
+	
+	
+	public int insert2(BoardDTO boardDTO, MultipartFile [] file, HttpSession session) throws Exception {
+		FileSaver fileSaver = new FileSaver();
+		int result = 0;
+		String filepath = session.getServletContext().getRealPath("resources/upload");
+		File f = new File(filepath);
+		if(!f.exists()){
+			f.mkdirs();
+		}
+		List<String> names = fileSaver.saver(file, filepath);
+		for(int i=0; i<names.size(); i++){
+			if(names.get(i)!=""){
+			FileDTO fileDTO = new FileDTO();
+			fileDTO.setFname(names.get(i));
+			fileDTO.setOname(file[i].getOriginalFilename());
+			fileDTO.setNum(boardDTO.getNum());
+			result = fileDAO.insert(fileDTO);
+			}
+		}
+		return result;
+	}
 
 	@Override
 	public int update(BoardDTO boardDTO) throws Exception {
@@ -63,8 +85,20 @@ public class NoticeService implements BoardService {
 	}
 
 	@Override
-	public int delete(int num) throws Exception {
-		return noticeDAO.delete(num);
+	public int delete(int num, HttpSession session) throws Exception {
+		String filePath = session.getServletContext().getRealPath("resources/upload");
+		List<FileDTO> ar= fileDAO.selectList(num);
+		int result=noticeDAO.delete(num);
+		result = fileDAO.delete(num);
+		for(FileDTO fileDTO: ar){
+			try{
+				File file = new File(filePath, fileDTO.getFname());
+				file.delete();
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 	@Override

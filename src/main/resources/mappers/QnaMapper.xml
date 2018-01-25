@@ -1,85 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="QnaMapper">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+  <mapper namespace="QnaMapper">
+  	<select id="totalCount" resultType="int" parameterType="listData">
+  		select nvl(count(num),0) from qna
+  		<if test="kind=='title'">
+  			where title LIKE '%'|| #{search}||'%'
+  		</if>
+  		<if test="kind=='writer'">
+  			where writer LIKE '%'|| #{search}||'%'
+  		</if>
+  		<if test="kind=='contents'">
+  			where contents LIKE '%'|| #{search}||'%'
+  		</if>
+  	</select>  
+  
+	<insert id="insert" parameterType="QnaDTO">
+		insert into qna values(qna_seq.nextval,#{title},#{contents},#{writer},0,sysdate,qna_seq.currval,0,0)
+	</insert>
+	
+	<update id="update" parameterType="QnaDTO">
+		update qna set title=#{title},contents=#{contents} where num=#{num}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete qna where num=#{num}
+	</delete>
 
-	<select id="totalCount" resultType="int" parameterType="ListData">
-  		select nvl(count(num),0) from QNA
-  		<if test="kind == 'title'">
-  			where title LIKE '%'||#{search}||'%' 
-  		</if>
-  		<if test="kind == 'writer'">
-  			where writer LIKE '%'||#{search}||'%' 
-  		</if>
-  		<if test="kind == 'contents'">
-  			where contents LIKE '%'||#{search}||'%' 
-  		</if> 
-  		
+  	<select id="selectOne" parameterType="int" resultType="QnaDTO">
+  		select * from qna where num=#{num}
   	</select>
-
-	<select id="selectList" parameterType="ListData" resultType="QnaDTO">
-		select * from 
-		(select rownum R, Q.* from 
-		(select * from QNA
-		<if test="kind == 'title'">
-  			where title LIKE '%'||#{search}||'%' 
+ 
+  	<select id="selectList" parameterType="listData" resultType="QnaDTO">
+  		select * from
+  		(select rownum R, Q.* from 
+  		(select * from qna 
+  		<if test="kind=='title'">
+  			where title LIKE '%'|| #{search}||'%'
   		</if>
-  		<if test="kind == 'writer'">
-  			where writer LIKE '%'||#{search}||'%' 
+  		<if test="kind=='writer'">
+  			where writer LIKE '%'|| #{search}||'%'
   		</if>
-  		<if test="kind == 'contents'">
-  			where contents LIKE '%'||#{search}||'%' 
-  		</if> 
-			order by ref desc, step asc) Q)
-			 where R between #{startRow} and #{lastRow}
-	</select>
-
-<select id="selectOne" parameterType="int" resultMap="QnaResult">
-select q.*, f.* from qna q, files f where q.num=#{num} and q.num=f.num(+)
-</select>
-
-	<resultMap type="qnaDTO" id="QnaResult">
-  		<id property="num" column="num"/>
-  		<result property="writer" column="writer"/>
-  		<result property="title" column="title"/>
-  		<result property="contents" column="contents"/>
-  		<result property="reg_date" column="reg_date"/>
-  		<result property="hit" column="hit"/>
-  		<result property="ref" column="ref"/>
-  		<result property="step" column="step"/>
-  		<result property="depth" column="depth"/>
-  		<collection property="files" ofType="FileDTO" javaType="ArrayList">
-  		<id property="fnum" column="fnum"/>
-  		<result property="num" column="num"/>
-  		<result property="fname" column="fname"/>
-  		<result property="oname" column="oname"/>
-  		</collection>
-  	</resultMap>
+  		<if test="kind=='contents'">
+  			where contents LIKE '%'|| #{search}||'%'
+  		</if>  		
+  		order by num desc)Q )
+  		where R between #{startRow} and #{lastRow} order by ref desc, step asc
+  	</select>
   	
+  	<insert id="replyInsert" parameterType="Map" >
+  		insert into qna values(qna_seq.nextval,#{qna.title},#{qna.contents},#{qna.writer},0,sysdate,#{parent.ref},#{parent.step}+1,#{parent.depth}+1)
+  	</insert>
   	
-  	
-<insert id="insert" parameterType="QnaDTO">
-<selectKey resultType="int" order="BEFORE" keyProperty="num">
-  	select qna_seq.nextval from dual
-  	</selectKey>
-insert into qna values (#{num}, #{title}, #{writer}, #{contents}, sysdate, 0, qna_seq.currval, 0, 0)
-</insert>
+  	<update id="replyUpdate" parameterType="QnaDTO">
+  		<![CDATA[update qna set step=step+1 where ref=#{ref} and step>#{step}]]>
+  	</update>
 
-<update id="update" parameterType="QnaDTO">
-update qna set title=#{title}, contents=#{contents} where num=#{num} 
-</update>
-
-<delete id="delete" parameterType="int">
-delete from qna where num=#{num}
-</delete>
-
-
-<update id="replyUpdate" parameterType="QnaDTO">
-<![CDATA[update qna set step=step+1 where ref=#{ref} and step>#{step}]]>         <!-- 부등호 사용할때 오류날수 있으므로 CDATA로 감싸줌 -->
-</update>
-
-<insert id="replyInsert" parameterType="QnaDTO">
-insert into qna values (qna_seq.nextval, #{title}, #{writer}, #{contents}, sysdate, 0, #{ref}, #{step}+1, #{depth}+1)
-</insert>
-</mapper>
+  
+  </mapper>

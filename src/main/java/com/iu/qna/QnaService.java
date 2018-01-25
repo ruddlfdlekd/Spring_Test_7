@@ -67,7 +67,7 @@ public class QnaService implements BoardService {
 	}
 
 	@Override
-	public int delete(int num) throws Exception {
+	public int delete(int num, HttpSession session) throws Exception {
 		// TODO Auto-generated method stub
 		return qnaDAO.delete(num);
 	}

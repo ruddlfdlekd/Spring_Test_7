@@ -2,14 +2,41 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  <mapper namespace="FileMapper">
   
-  <insert id="insert" parameterType="FileDTO">
-  insert into files values (file_seq.nextval,#{num},#{fname},#{oname})
-  </insert>
-  
-  <select id="selectFile" parameterType="int"  resultType="FileDTO">
-  select * from files where num=#{num}
-  </select>
-  
-  </mapper>
+  	<mapper namespace="FileMapper">
+  	
+  		<delete id="delete" parameterType="int">
+  			delete files where num=#{num}
+  		</delete>
+  		
+  		<delete id="deleteFnum" parameterType="int">
+  			delete files where fnum=#{fnum}
+  		</delete>
+  		
+  		<insert id="insert2" parameterType="FileDTO">
+  			insert into MP values(#{id},#{fname},#{oname},MP_seq.nextval)
+  		</insert>
+  		
+  		
+  		<insert id="insert" parameterType="FileDTO">
+  			insert into files values(board_seq.nextval,#{num},#{fname}, #{oname})
+  		</insert>
+  		
+  		<select id="selectList" parameterType="int" resultType="FileDTO">
+  			select * from files where num=#{num}
+  		</select>
+  		
+  		<select id="selectOne" parameterType="MemberDTO" resultType="FileDTO">
+  			select * from mp where id=#{id}
+  		</select>
+  		
+  		<delete id="delete2" parameterType="MemberDTO">
+  			delete mp where fnum=(select min(fnum) from mp where id=#{id})
+  		</delete>
+  		
+  		<update id="update" parameterType="FileDTO">
+  		    update mp set fname=#{fname}, oname=#{oname} where id=#{id} 
+  		</update>
+  		
+  		
+  	</mapper>

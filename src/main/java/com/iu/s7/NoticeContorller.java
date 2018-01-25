@@ -21,8 +21,50 @@ import com.iu.util.ListData;
 @Controller
 @RequestMapping(value="/notice/**")
 public class NoticeContorller {
+	
 	@Inject
 	private NoticeService noticeService;
+
+	
+	@RequestMapping(value="noticeUpdate", method=RequestMethod.GET)
+	public String Update(int num, Model model)throws Exception{
+		BoardDTO boardDTO = noticeService.selectOne(num);
+		model.addAttribute("board", "notice");
+		model.addAttribute("view", boardDTO);
+		return "board/boardUpdate";
+	}
+	
+	
+	@RequestMapping(value="noticeUpdate", method=RequestMethod.POST)
+	public String Update(BoardDTO boardDTO,MultipartFile[] f1, HttpSession session, RedirectAttributes re)throws Exception{
+	   int result = noticeService.update(boardDTO);
+	   int result2 = noticeService.insert2(boardDTO, f1, session);
+		String message="실패 또는 바뀐거 없음";
+		if((result>0)&&(result2>0)){
+			message="Update Success";
+		}
+		
+		re.addFlashAttribute("message", message);
+		return "redirect:./noticeList";
+	}
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value="noticeDelete")
+	public String delete(int num, HttpSession session,  RedirectAttributes re)throws Exception{
+		int result= noticeService.delete(num, session);
+		String message="Delete Fail";
+		if(result>0){
+			message="Delete Success";
+		}
+		
+		re.addFlashAttribute("message", message);
+		return "redirect:./noticeList";
+		
+	}
 
 	@RequestMapping(value="noticeView")
 	public ModelAndView SelectOne(int num)throws Exception{
