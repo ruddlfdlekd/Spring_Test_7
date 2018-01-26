@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	
+
+
+
+	<bean class="com.iu.aop.transfer.CardCheck" id="cardCheck" />
+	<bean class="com.iu.aop.transfer.Ticket" id="ticket"/>
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<aop:config>
+		<aop:aspect id="cardAspect" ref="cardCheck">
+			<aop:pointcut expression="execution(* com.iu.aop.transfer.Transport.*())" id="trans"/>
+			<aop:around method="check" pointcut-ref="trans" />
+		</aop:aspect> 
+		<aop:aspect id="ticketAspect" ref="ticket">
+			<aop:pointcut expression="execution(* com.iu.aop.transfer.Trip.*())" id="t"/>
+			<aop:before method="getTicket" pointcut-ref="t" />
+		</aop:aspect>
+	</aop:config>
+	
+</beans>

@@ -14,6 +14,7 @@
 <P>  The time on the server is ${serverTime}. </P>
 <a href="notice/noticeList">NoticeList</a>
 <a href="qna/qnaList">QnaList</a>
+<a href="./transfer">transfer</a>
 <c:if test="${empty member}">
 <a href="./member/memberLogin">Login</a>
 <a href="./member/memberJoin">Join</a>
